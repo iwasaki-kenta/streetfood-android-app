@@ -2,34 +2,37 @@
 <menu xmlns:android="http://schemas.android.com/apk/res/android">
 
     <group android:checkableBehavior="single">
+        <!-- Browse by foods then browse by vendor names alphanumber-categorized. -->
         <item
-            android:id="@+id/nav_camera"
+            android:id="@+id/browse_vendors"
             android:icon="@drawable/ic_menu_camera"
-            android:title="Import" />
+            android:title="Browse" />
+        <!--Anything popular A to Z.-->
         <item
-            android:id="@+id/nav_gallery"
+            android:id="@+id/discover_vendors"
             android:icon="@drawable/ic_menu_gallery"
-            android:title="Gallery" />
+            android:title="Discover" />
+        <!-- Anything popular & most recent. -->
         <item
-            android:id="@+id/nav_slideshow"
+            android:id="@+id/popular_vendors"
             android:icon="@drawable/ic_menu_slideshow"
-            android:title="Slideshow" />
+            android:title="Popular" />
         <item
-            android:id="@+id/nav_manage"
+            android:id="@+id/liked_vendors"
             android:icon="@drawable/ic_menu_manage"
-            android:title="Tools" />
+            android:title="Likes" />
     </group>
 
-    <item android:title="Communicate">
+    <item android:title="Account">
         <menu>
             <item
                 android:id="@+id/nav_share"
                 android:icon="@drawable/ic_menu_share"
-                android:title="Share" />
+                android:title="Manage" />
             <item
                 android:id="@+id/nav_send"
                 android:icon="@drawable/ic_menu_send"
-                android:title="Send" />
+                android:title="Settings" />
         </menu>
     </item>
 
