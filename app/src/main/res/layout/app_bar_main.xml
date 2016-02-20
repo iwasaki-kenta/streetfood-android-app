@@ -21,6 +21,8 @@
 
     </android.support.design.widget.AppBarLayout>
 
-    <include layout="@layout/content_main" />
+    <include
+        android:id="@+id/currentFragment"
+        layout="@layout/fragment_browse_food_cat" />
 
 </android.support.design.widget.CoordinatorLayout>

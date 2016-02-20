@@ -1,6 +1,9 @@
 package hkust.com.bitwise;
 
 import android.support.design.widget.NavigationView;
+import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentManager;
+import android.support.v4.app.FragmentTransaction;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
@@ -8,10 +11,14 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.widget.RelativeLayout;
 
 import org.androidannotations.annotations.AfterViews;
 import org.androidannotations.annotations.EActivity;
 import org.androidannotations.annotations.ViewById;
+
+import hkust.com.bitwise.fragments.BrowseFoodCategoryFragment;
+import hkust.com.bitwise.fragments.BrowseFoodCategoryFragment_;
 
 @EActivity(R.layout.activity_main)
 public class MainActivity extends AppCompatActivity
@@ -26,6 +33,11 @@ public class MainActivity extends AppCompatActivity
     @ViewById
     NavigationView navigationView;
 
+    @ViewById
+    RelativeLayout currentFragment;
+
+    Fragment browseFoodCatFragment;
+
     @AfterViews
     void initState() {
         setSupportActionBar(toolbar);
@@ -36,6 +48,11 @@ public class MainActivity extends AppCompatActivity
         toggle.syncState();
 
         navigationView.setNavigationItemSelectedListener(this);
+
+        FragmentManager fragmentManager = getSupportFragmentManager();
+        FragmentTransaction transaction = fragmentManager.beginTransaction();
+        transaction.replace(R.id.currentFragment, browseFoodCatFragment = BrowseFoodCategoryFragment_.builder().build());
+        transaction.commit();
     }
 
     @Override
