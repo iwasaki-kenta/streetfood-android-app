@@ -5,7 +5,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:fitsSystemWindows="true"
-    tools:context="hkust.com.bitwise.VenueActivity">
+    tools:context=".VendorActivity">
 
     <android.support.design.widget.AppBarLayout
         android:id="@+id/app_bar"
@@ -15,7 +15,7 @@
         android:theme="@style/AppTheme.AppBarOverlay">
 
         <android.support.design.widget.CollapsingToolbarLayout
-            android:id="@+id/toolbar_layout"
+            android:id="@+id/toolbarLayout"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:fitsSystemWindows="true"
@@ -37,18 +37,115 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         app:layout_behavior="@string/appbar_scrolling_view_behavior"
-        tools:context="hkust.com.bitwise.VenueActivity"
+        tools:context=".VendorActivity"
         tools:showIn="@layout/activity_venue">
 
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_margin="16dp">
-            <TextView
-                android:layout_width="wrap_content"
+            android:layout_margin="16dp"
+            android:orientation="vertical">
+
+            <android.support.v7.widget.CardView
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_margin="@dimen/text_margin"
-                android:text="Some pretty venue information." />
+                app:cardCornerRadius="4dp"
+                app:contentPadding="4dp">
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:orientation="horizontal"
+                    android:weightSum="1">
+
+                    <ImageView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_margin="6dp"
+                        android:layout_weight="0.2"
+                        android:src="@drawable/ic_menu_manage" />
+
+                    <TextView
+                        android:id="@+id/district"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:layout_marginLeft="6dp"
+                        android:gravity="center_vertical"
+                        android:text="District Name"
+                        android:textAppearance="@android:style/TextAppearance.SearchResult.Title"
+                        android:textColor="@android:color/black" />
+                </LinearLayout>
+            </android.support.v7.widget.CardView>
+
+            <android.support.v7.widget.CardView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="12dp"
+                app:cardCornerRadius="4dp"
+                app:contentPadding="4dp">
+
+                <RelativeLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent">
+
+                    <LinearLayout
+                        android:id="@+id/menuTitleBar"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:orientation="horizontal"
+                        android:weightSum="1">
+
+                        <ImageView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_margin="6dp"
+                            android:layout_weight="0.2"
+                            android:src="@drawable/ic_menu_gallery" />
+
+                        <TextView
+                            android:id="@+id/menuTitle"
+                            android:layout_width="match_parent"
+                            android:layout_height="match_parent"
+                            android:layout_marginLeft="6dp"
+                            android:gravity="center_vertical"
+                            android:text="Menu"
+                            android:textAppearance="@android:style/TextAppearance.SearchResult.Title"
+                            android:textColor="@android:color/black" />
+                    </LinearLayout>
+
+                    <!-- Menu items -->
+                    <android.support.v7.widget.RecyclerView
+                        android:id="@+id/menuItems"
+                        android:layout_width="match_parent"
+                        android:layout_height="250dp"
+                        android:scrollbars="none"
+                        android:layout_below="@+id/menuTitleBar"/>
+                </RelativeLayout>
+
+
+            </android.support.v7.widget.CardView>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="12dp"
+                android:orientation="horizontal">
+
+                <ToggleButton
+                    android:id="@+id/likeButton"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:drawableTop="@drawable/toggle_selector"
+                    android:textOff=""
+                    android:textOn="" />
+
+                <Button
+                    android:id="@+id/takeOutButton"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:text="Take Out\n[XXXX-4509 VISA]"
+                    android:textSize="20sp"/>
+            </LinearLayout>
         </LinearLayout>
 
     </android.support.v4.widget.NestedScrollView>

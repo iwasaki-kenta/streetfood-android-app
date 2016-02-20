@@ -6,6 +6,12 @@ import android.support.v7.widget.RecyclerView;
 import android.view.View;
 import android.view.ViewGroup;
 
+import com.google.gson.JsonArray;
+import com.google.gson.JsonElement;
+import com.google.gson.JsonObject;
+import com.koushikdutta.async.future.FutureCallback;
+import com.koushikdutta.ion.Ion;
+
 import org.androidannotations.annotations.AfterViews;
 import org.androidannotations.annotations.EFragment;
 import org.androidannotations.annotations.ViewById;
@@ -19,12 +25,13 @@ import hkust.com.bitwise.ui.RecyclerViewAdapterBase;
 import hkust.com.bitwise.ui.ViewWrapper;
 import hkust.com.bitwise.ui.items.FoodCategoryItemView;
 import hkust.com.bitwise.ui.items.FoodCategoryItemView_;
+import hkust.com.bitwise.utils.APIUtils;
 import hkust.com.bitwise.utils.FragmentUtil;
 
 @EFragment(R.layout.fragment_browse_food)
 public class BrowseFoodFragment extends Fragment {
 
-    List<FoodCategory> foodCategoryList = new ArrayList<FoodCategory>();
+    ArrayList<FoodCategory> foodCategoryList = new ArrayList<FoodCategory>();
 
     @ViewById
     RecyclerView list;
@@ -38,9 +45,24 @@ public class BrowseFoodFragment extends Fragment {
         list.setLayoutManager(layoutManager = new GridLayoutManager(getContext(), 2));
         list.setAdapter(adapter = new FoodCategoryAdapter());
 
-        for (int i = 0; i < 50; i++)
-            foodCategoryList.add(new FoodCategory());
-        adapter.notifyDataSetChanged();
+        Ion.with(getContext()).load(APIUtils.selections()).asJsonArray().setCallback(new FutureCallback<JsonArray>() {
+            @Override
+            public void onCompleted(Exception e, JsonArray result) {
+                if (e != null) {
+                    e.printStackTrace();
+                    return;
+                }
+                foodCategoryList.clear();
+                for (int i = 0; i < result.size(); i++) {
+                    JsonObject obj = result.get(i).getAsJsonObject();
+                    FoodCategory category = new FoodCategory();
+                    category.setName(obj.get("name").getAsString());
+                    category.setImage(obj.get("image").getAsString());
+                    foodCategoryList.add(category);
+                }
+                adapter.notifyDataSetChanged();
+            }
+        });
     }
 
     class FoodCategoryAdapter extends RecyclerViewAdapterBase<FoodCategory, FoodCategoryItemView> {
@@ -52,14 +74,17 @@ public class BrowseFoodFragment extends Fragment {
 
         @Override
         public void onBindViewHolder(ViewWrapper<FoodCategoryItemView> holder, int position) {
+            final FoodCategory cat = foodCategoryList.get(position);
+
             FoodCategoryItemView view = holder.getView();
-            FoodCategory cat = foodCategoryList.get(position);
             view.bind(cat);
 
             view.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    FragmentUtil.gotoFragment(getFragmentManager(), BrowseVenuesFragment_.builder().build(), true, null);
+                    FragmentUtil.gotoFragment(getFragmentManager(), BrowseVendorFragment_.builder()
+                            .parcelableArrayListArg("foodCategoryList", foodCategoryList)
+                            .arg("selectedCategory", cat.getName()).build(), true, null);
                 }
             });
         }

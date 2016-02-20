@@ -23,7 +23,7 @@
             </intent-filter>
         </activity>
         <activity
-            android:name=".VenueActivity_"
+            android:name=".VendorActivity_"
             android:label="@string/title_activity_venue"
             android:parentActivityName=".MainActivity_"
             android:theme="@style/AppTheme.NoActionBar">

@@ -53,13 +53,13 @@ public class MainActivity extends AppCompatActivity
         toggle = new DrawerListener(
                 this, drawer, toolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close);
         toggle.setToolbarNavigationClickListener(new View.OnClickListener() {
-                    @Override
-                    public void onClick(View v) {
-                        if (!toggle.isDrawerIndicatorEnabled()) {
-                            getSupportFragmentManager().popBackStackImmediate();
-                        }
-                    }
-                });
+            @Override
+            public void onClick(View v) {
+                if (!toggle.isDrawerIndicatorEnabled()) {
+                    getSupportFragmentManager().popBackStackImmediate();
+                }
+            }
+        });
         drawer.setDrawerListener(toggle);
         toggle.syncState();
 
@@ -102,30 +102,32 @@ public class MainActivity extends AppCompatActivity
     public boolean onNavigationItemSelected(MenuItem item) {
         int id = item.getItemId();
 
-        item.setChecked(!item.isChecked());
+        if (!item.isChecked()) {
+            item.setChecked(true);
 
-        new Handler().postDelayed(new Runnable() {
-            @Override
-            public void run() {
-                drawer.closeDrawers();
+            new Handler().postDelayed(new Runnable() {
+                @Override
+                public void run() {
+                    drawer.closeDrawers();
+                }
+            }, 150);
+
+            if (id == R.id.browse_vendors) {
+                nextFragment = browseFoodFragment;
+            } else if (id == R.id.discover_vendors) {
+
+            } else if (id == R.id.popular_vendors) {
+
+            } else if (id == R.id.liked_vendors) {
+
+            } else if (id == R.id.nav_share) {
+
+            } else if (id == R.id.nav_send) {
+
             }
-        }, 150);
 
-        if (id == R.id.browse_vendors) {
-            nextFragment = browseFoodFragment;
-        } else if (id == R.id.discover_vendors) {
-
-        } else if (id == R.id.popular_vendors) {
-
-        } else if (id == R.id.liked_vendors) {
-
-        } else if (id == R.id.nav_share) {
-
-        } else if (id == R.id.nav_send) {
-
+            drawer.closeDrawer(GravityCompat.START);
         }
-
-        drawer.closeDrawer(GravityCompat.START);
         return true;
     }
 

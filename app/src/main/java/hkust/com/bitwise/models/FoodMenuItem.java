@@ -3,13 +3,27 @@ package hkust.com.bitwise.models;
 import android.os.Parcel;
 import android.os.Parcelable;
 
-public class FoodCategory implements Parcelable {
+public class FoodMenuItem implements Parcelable {
     private String id;
     private String name;
     private String type;
     private String image;
 
+    private int quantity;
+
     private int price;
+
+    public void increaseQuantity() {
+        quantity++;
+    }
+
+    public void minusQuantity() {
+        quantity--;
+    }
+
+    public int getQuantity() {
+        return quantity;
+    }
 
     public String getType() {
         return type;
@@ -51,15 +65,16 @@ public class FoodCategory implements Parcelable {
         this.name = name;
     }
 
-    public FoodCategory() {
+    public FoodMenuItem() {
     }
 
-    protected FoodCategory(Parcel in) {
+    protected FoodMenuItem(Parcel in) {
         id = in.readString();
         name = in.readString();
         type = in.readString();
         image = in.readString();
         price = in.readInt();
+        quantity = in.readInt();
     }
 
     @Override
@@ -74,18 +89,19 @@ public class FoodCategory implements Parcelable {
         dest.writeString(type);
         dest.writeString(image);
         dest.writeInt(price);
+        dest.writeInt(quantity);
     }
 
     @SuppressWarnings("unused")
-    public static final Parcelable.Creator<FoodCategory> CREATOR = new Parcelable.Creator<FoodCategory>() {
+    public static final Creator<FoodMenuItem> CREATOR = new Creator<FoodMenuItem>() {
         @Override
-        public FoodCategory createFromParcel(Parcel in) {
-            return new FoodCategory(in);
+        public FoodMenuItem createFromParcel(Parcel in) {
+            return new FoodMenuItem(in);
         }
 
         @Override
-        public FoodCategory[] newArray(int size) {
-            return new FoodCategory[size];
+        public FoodMenuItem[] newArray(int size) {
+            return new FoodMenuItem[size];
         }
     };
 }

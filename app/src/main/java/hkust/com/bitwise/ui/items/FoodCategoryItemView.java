@@ -4,6 +4,7 @@ import android.content.Context;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
+import android.widget.TextView;
 
 import com.koushikdutta.ion.Ion;
 
@@ -18,12 +19,15 @@ public class FoodCategoryItemView extends LinearLayout {
     @ViewById
     ImageView artwork;
 
+    @ViewById
+    TextView title;
+
     public FoodCategoryItemView(Context context) {
         super(context);
     }
 
     public void bind(FoodCategory cat) {
-        // TODO: Bind food category values to view here.
-        Ion.with(artwork).load("http://www.placeholdr.pics/250/250");
+        title.setText(cat.getName());
+        Ion.with(artwork).centerCrop().load(cat.getImage());
     }
 }
