@@ -23,6 +23,6 @@
 
     <include
         android:id="@+id/currentFragment"
-        layout="@layout/fragment_browse_food_cat" />
+        layout="@layout/fragment_browse_food" />
 
 </android.support.design.widget.CoordinatorLayout>

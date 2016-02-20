@@ -2,12 +2,10 @@ package hkust.com.bitwise.fragments;
 
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.GridLayoutManager;
-import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.View;
 import android.view.ViewGroup;
 
-import org.androidannotations.annotations.AfterInject;
 import org.androidannotations.annotations.AfterViews;
 import org.androidannotations.annotations.EFragment;
 import org.androidannotations.annotations.ViewById;
@@ -17,13 +15,14 @@ import java.util.List;
 
 import hkust.com.bitwise.R;
 import hkust.com.bitwise.models.FoodCategory;
+import hkust.com.bitwise.ui.RecyclerViewAdapterBase;
 import hkust.com.bitwise.ui.ViewWrapper;
 import hkust.com.bitwise.ui.items.FoodCategoryItemView;
-import hkust.com.bitwise.ui.RecyclerViewAdapterBase;
 import hkust.com.bitwise.ui.items.FoodCategoryItemView_;
+import hkust.com.bitwise.utils.FragmentUtil;
 
-@EFragment(R.layout.fragment_browse_food_cat)
-public class BrowseFoodCategoryFragment extends Fragment {
+@EFragment(R.layout.fragment_browse_food)
+public class BrowseFoodFragment extends Fragment {
 
     List<FoodCategory> foodCategoryList = new ArrayList<FoodCategory>();
 
@@ -36,7 +35,7 @@ public class BrowseFoodCategoryFragment extends Fragment {
 
     @AfterViews
     void setupList() {
-        list.setLayoutManager(layoutManager = new GridLayoutManager(getContext(), 3));
+        list.setLayoutManager(layoutManager = new GridLayoutManager(getContext(), 2));
         list.setAdapter(adapter = new FoodCategoryAdapter());
 
         for (int i = 0; i < 50; i++)
@@ -60,7 +59,7 @@ public class BrowseFoodCategoryFragment extends Fragment {
             view.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-
+                    FragmentUtil.gotoFragment(getFragmentManager(), BrowseVenuesFragment_.builder().build(), true, null);
                 }
             });
         }
