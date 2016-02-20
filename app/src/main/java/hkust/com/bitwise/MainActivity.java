@@ -38,7 +38,7 @@ public class MainActivity extends AppCompatActivity
     @ViewById
     RelativeLayout currentFragment;
 
-    Fragment browseFoodCatFragment;
+    Fragment browseFoodFragment;
 
     Fragment nextFragment;
 
@@ -47,17 +47,28 @@ public class MainActivity extends AppCompatActivity
     @AfterViews
     void initState() {
         setSupportActionBar(toolbar);
+        getSupportActionBar().setDisplayShowHomeEnabled(true);
+        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
         toggle = new DrawerListener(
                 this, drawer, toolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close);
+        toggle.setToolbarNavigationClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        if (!toggle.isDrawerIndicatorEnabled()) {
+                            getSupportFragmentManager().popBackStackImmediate();
+                        }
+                    }
+                });
         drawer.setDrawerListener(toggle);
         toggle.syncState();
 
         navigationView.setNavigationItemSelectedListener(this);
 
-        browseFoodCatFragment = BrowseFoodFragment_.builder().build();
+        browseFoodFragment = BrowseFoodFragment_.builder().build();
+        FragmentUtil.gotoFragment(getSupportFragmentManager(), browseFoodFragment, false, null);
 
-        FragmentUtil.gotoFragment(getSupportFragmentManager(), browseFoodCatFragment, false, null);
+        getSupportFragmentManager().addOnBackStackChangedListener(this);
     }
 
 
@@ -101,7 +112,7 @@ public class MainActivity extends AppCompatActivity
         }, 150);
 
         if (id == R.id.browse_vendors) {
-            nextFragment = browseFoodCatFragment;
+            nextFragment = browseFoodFragment;
         } else if (id == R.id.discover_vendors) {
 
         } else if (id == R.id.popular_vendors) {
