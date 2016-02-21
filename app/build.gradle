@@ -33,6 +33,7 @@ repositories {
     maven {
         url 'http://oss.sonatype.org/content/repositories/snapshots'
     }
+    maven { url "https://jitpack.io" }
 }
 
 
@@ -50,4 +51,5 @@ dependencies {
     compile 'com.koushikdutta.ion:ion:2.1.7'
     compile 'com.michaelpardo:activeandroid:3.1.0-SNAPSHOT'
     compile 'com.squareup.picasso:picasso:2.5.2'
+    compile 'com.github.jiahuanyu:CircleTimerView:-SNAPSHOT'
 }

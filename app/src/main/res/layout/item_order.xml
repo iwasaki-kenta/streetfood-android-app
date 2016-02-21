@@ -2,7 +2,7 @@
 <android.support.v7.widget.CardView xmlns:card_view="http://schemas.android.com/apk/res-auto"
     xmlns:android="http://schemas.android.com/apk/res/android"
     android:id="@+id/card_view"
-    android:layout_width="fill_parent"
+    android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:layout_margin="5dp"
     card_view:cardCornerRadius="2dp"
@@ -22,7 +22,7 @@
             android:layout_alignParentTop="true" >
 
             <ImageView
-                android:id="@+id/player_thumbnail"
+                android:id="@+id/artwork"
                 android:layout_width="64dp"
                 android:layout_height="64dp"
                 android:layout_alignParentTop="true"
@@ -31,7 +31,7 @@
         </RelativeLayout>
 
         <LinearLayout
-            android:layout_width="wrap_content"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_toRightOf="@+id/thumbnail_container"
             android:orientation="vertical"
@@ -39,7 +39,7 @@
 
             <TextView
                 android:id="@+id/vendorName"
-                android:layout_width="wrap_content"
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:maxLines="1"
                 android:singleLine="true"
@@ -48,7 +48,7 @@
                 android:textSize="16sp" />
 
             <TextView
-                android:id="@+id/orderDate"
+                android:id="@+id/district"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:singleLine="true"

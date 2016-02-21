@@ -29,6 +29,7 @@ public class FoodCategoryItemView extends LinearLayout {
 
     public void bind(FoodCategory cat) {
         title.setText(cat.getName());
+        if (artwork != null)
         Picasso.with(getContext()).load(cat.getImage()).fit().centerCrop().into(artwork);
     }
 }

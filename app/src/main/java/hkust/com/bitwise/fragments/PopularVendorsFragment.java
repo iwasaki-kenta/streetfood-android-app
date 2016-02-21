@@ -1,8 +1,6 @@
 package hkust.com.bitwise.fragments;
 
 import android.app.ProgressDialog;
-import android.os.Bundle;
-import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.support.v4.view.ViewCompat;
 import android.support.v4.widget.SwipeRefreshLayout;
@@ -33,11 +31,13 @@ import hkust.com.bitwise.ui.StableLayoutManager;
 import hkust.com.bitwise.ui.ViewWrapper;
 import hkust.com.bitwise.ui.items.FoodVendorItemView;
 import hkust.com.bitwise.ui.items.FoodVendorItemView_;
+import hkust.com.bitwise.ui.items.PopularVendorItemView;
+import hkust.com.bitwise.ui.items.PopularVendorItemView_;
 import hkust.com.bitwise.utils.APIUtils;
 
-@EFragment(R.layout.fragment_browse_vendors)
-public class BrowseVendorFragment extends Fragment {
-    ArrayList<FoodVendor> foodVendorList = new ArrayList<FoodVendor>();
+@EFragment(R.layout.fragment_popular_vendors)
+public class PopularVendorsFragment extends Fragment {
+    ArrayList<FoodVendor> popularVendorList = new ArrayList<FoodVendor>();
 
     @FragmentArg
     ArrayList<FoodCategory> foodCategoryList;
@@ -63,7 +63,7 @@ public class BrowseVendorFragment extends Fragment {
         list.setLayoutManager(layoutManager = new StableLayoutManager(getContext(), LinearLayoutManager.VERTICAL, false));
         list.setAdapter(adapter = new VendorAdapter());
 
-        if (foodVendorList.size() == 0 && !refreshLayout.isRefreshing()) {
+        if (popularVendorList.size() == 0 && !refreshLayout.isRefreshing()) {
             loadVenues();
         }
 
@@ -93,17 +93,17 @@ public class BrowseVendorFragment extends Fragment {
         refreshLayout.setRefreshing(true);
         final ProgressDialog dialog = new ProgressDialog(getContext());
         dialog.setTitle("Loading");
-        dialog.setMessage("Looking for street food...");
+        dialog.setMessage("Looking for the most popular...");
         dialog.show();
 
-        Ion.with(getContext()).load(APIUtils.selections(selectedCategory, currentPageNum, null)).asJsonArray().setCallback(new FutureCallback<JsonArray>() {
+        Ion.with(getContext()).load(APIUtils.popular(currentPageNum)).asJsonArray().setCallback(new FutureCallback<JsonArray>() {
             @Override
             public void onCompleted(Exception e, JsonArray result) {
                 if (e != null) {
                     e.printStackTrace();
                     return;
                 }
-                if (currentPageNum == 0) foodVendorList.clear();
+                if (currentPageNum == 0) popularVendorList.clear();
                 for (int i = 0; i < result.size(); i++) {
                     JsonObject obj = result.get(i).getAsJsonObject();
                     FoodVendor venue = new FoodVendor();
@@ -115,7 +115,7 @@ public class BrowseVendorFragment extends Fragment {
                     for (JsonElement item : obj.get("items").getAsJsonArray()) {
                         venue.addMenuItemId(item.getAsString());
                     }
-                    foodVendorList.add(venue);
+                    popularVendorList.add(venue);
                 }
                 limitHit = result.size() == 0;
                 adapter.notifyDataSetChanged();
@@ -128,18 +128,18 @@ public class BrowseVendorFragment extends Fragment {
 
     }
 
-    class VendorAdapter extends RecyclerViewAdapterBase<FoodVendor, FoodVendorItemView> {
+    class VendorAdapter extends RecyclerViewAdapterBase<FoodVendor, PopularVendorItemView> {
 
         @Override
-        protected FoodVendorItemView onCreateItemView(ViewGroup parent, int viewType) {
-            return FoodVendorItemView_.build(getContext());
+        protected PopularVendorItemView onCreateItemView(ViewGroup parent, int viewType) {
+            return PopularVendorItemView_.build(getContext());
         }
 
         @Override
-        public void onBindViewHolder(ViewWrapper<FoodVendorItemView> holder, int position) {
-            final FoodVendor vendor = foodVendorList.get(position);
+        public void onBindViewHolder(ViewWrapper<PopularVendorItemView> holder, int position) {
+            final FoodVendor vendor = popularVendorList.get(position);
 
-            FoodVendorItemView view = holder.getView();
+            PopularVendorItemView view = holder.getView();
             view.bind(vendor);
 
             view.setOnClickListener(new View.OnClickListener() {
@@ -152,7 +152,7 @@ public class BrowseVendorFragment extends Fragment {
 
         @Override
         public int getItemCount() {
-            return foodVendorList.size();
+            return popularVendorList.size();
         }
     }
 }

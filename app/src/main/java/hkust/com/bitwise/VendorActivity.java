@@ -31,11 +31,13 @@ import org.androidannotations.annotations.Extra;
 import org.androidannotations.annotations.ViewById;
 
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.List;
 
 import hkust.com.bitwise.fragments.BrowseVendorFragment_;
 import hkust.com.bitwise.models.FoodCategory;
 import hkust.com.bitwise.models.FoodMenuItem;
+import hkust.com.bitwise.models.FoodOrder;
 import hkust.com.bitwise.models.FoodVendor;
 import hkust.com.bitwise.models.Likes;
 import hkust.com.bitwise.ui.NoScrollRecycler;
@@ -61,6 +63,9 @@ public class VendorActivity extends AppCompatActivity {
 
     @ViewById
     TextView district;
+
+    @ViewById
+    TextView ordersCompleted;
 
     List<FoodMenuItem> menuItemList = new ArrayList<FoodMenuItem>();
 
@@ -111,6 +116,7 @@ public class VendorActivity extends AppCompatActivity {
 
         toolbarLayout.setTitle(vendor.getName());
         district.setText(vendor.getDistrict());
+        ordersCompleted.setText(String.valueOf(vendor.getOrdersCompleted()) + " Orders Completed");
 
         likeButton.setChecked(new Select().from(Likes.class).where("vendorId = ?", vendor.getId()).exists());
 
@@ -147,7 +153,14 @@ public class VendorActivity extends AppCompatActivity {
                 public void onClick(DialogInterface dialog, int which) {
                     switch (which) {
                         case DialogInterface.BUTTON_POSITIVE:
+                            FoodOrder order = new FoodOrder();
+                            order.setOrderDate(Calendar.getInstance().getTime());
+                            order.setOrderedItems(menuItemList);
+                            order.setVendor(vendor);
+                            order.save();
+
                             Toast.makeText(VendorActivity.this, "Your order has successfully been placed!", Toast.LENGTH_LONG).show();
+                            OrderActivity_.intent(VendorActivity.this).extra("selectedOrder", order).start();
                             finish();
                             break;
 

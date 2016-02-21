@@ -19,7 +19,9 @@ import org.androidannotations.annotations.EActivity;
 import org.androidannotations.annotations.ViewById;
 
 import hkust.com.bitwise.fragments.BrowseFoodFragment_;
+import hkust.com.bitwise.fragments.BrowseOrdersFragment_;
 import hkust.com.bitwise.fragments.LikesFragment_;
+import hkust.com.bitwise.fragments.PopularVendorsFragment_;
 import hkust.com.bitwise.utils.FragmentUtil;
 
 @EActivity(R.layout.activity_main)
@@ -39,6 +41,8 @@ public class MainActivity extends AppCompatActivity
     RelativeLayout currentFragment;
 
     Fragment browseFoodFragment;
+    Fragment browseOrdersFragment;
+    Fragment popularFragment;
     Fragment likesFragment;
 
     Fragment nextFragment;
@@ -67,6 +71,8 @@ public class MainActivity extends AppCompatActivity
         navigationView.setNavigationItemSelectedListener(this);
 
         browseFoodFragment = BrowseFoodFragment_.builder().build();
+        browseOrdersFragment = BrowseOrdersFragment_.builder().build();
+        popularFragment = PopularVendorsFragment_.builder().build();
         likesFragment = LikesFragment_.builder().build();
 
         FragmentUtil.gotoFragment(getSupportFragmentManager(), browseFoodFragment, false, null);
@@ -100,16 +106,12 @@ public class MainActivity extends AppCompatActivity
 
             if (id == R.id.browse_vendors) {
                 nextFragment = browseFoodFragment;
-            } else if (id == R.id.discover_vendors) {
-
             } else if (id == R.id.popular_vendors) {
-
+                nextFragment = popularFragment;
             } else if (id == R.id.liked_vendors) {
                 nextFragment = likesFragment;
-            } else if (id == R.id.nav_share) {
-
-            } else if (id == R.id.nav_send) {
-
+            } else if (id == R.id.orders) {
+                nextFragment = browseOrdersFragment;
             }
 
             drawer.closeDrawer(GravityCompat.START);

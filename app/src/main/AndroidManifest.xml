@@ -5,7 +5,7 @@
     <uses-permission android:name="android.permission.INTERNET" />
     <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
 
-    <application
+    <application xmlns:tools="http://schemas.android.com/tools"
         android:name="com.activeandroid.app.Application"
         android:allowBackup="true"
         android:icon="@mipmap/ic_launcher"
@@ -14,13 +14,13 @@
         android:theme="@style/AppTheme">
         <meta-data
             android:name="AA_DB_NAME"
-            android:value="streetbite.db" />
+            android:value="sb.db" />
         <meta-data
             android:name="AA_DB_VERSION"
-            android:value="2" />
+            android:value="4" />
         <meta-data
             android:name="AA_MODELS"
-            android:value="hkust.com.bitwise.models.Likes" />
+            android:value="hkust.com.bitwise.models.Likes,hkust.com.bitwise.models.FoodOrder" />
 
         <activity
             android:name=".MainActivity_"
@@ -41,6 +41,14 @@
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value="hkust.com.bitwise.MainActivity_" />
+        </activity>
+        <activity
+            android:name=".OrderActivity_"
+            android:parentActivityName=".MainActivity_"
+            android:theme="@style/AppTheme.NoActionBar">
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value="hkust.com.bitwise.MainActivity_" />>
         </activity>
     </application>
 

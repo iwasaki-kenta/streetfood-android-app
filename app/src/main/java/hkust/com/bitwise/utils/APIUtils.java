@@ -10,7 +10,7 @@ import java.util.List;
 
 public class APIUtils {
     private static final String BASE_URL = "http://bwhacks.prashcr.xyz/api/v1/";
-    private static final int ELEMENTS_PER_PAGE = 50;
+    private static final int ELEMENTS_PER_PAGE = 5;
 
     public static final String items() {
         return BASE_URL + "items";
@@ -27,6 +27,12 @@ public class APIUtils {
             System.out.println(params.toString());
             url += "&query=" + params.toString();
         }
+        return url;
+    }
+
+    public static final String popular(int pageNum) {
+        String url = BASE_URL + "vendors?limit=" + Integer.toString(ELEMENTS_PER_PAGE) + "&skip="
+                + Integer.toString(ELEMENTS_PER_PAGE * pageNum) + "&sort=-ordersCompleted";
         return url;
     }
 
