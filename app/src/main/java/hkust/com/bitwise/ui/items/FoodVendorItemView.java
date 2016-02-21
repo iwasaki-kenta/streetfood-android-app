@@ -6,6 +6,7 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.koushikdutta.ion.Ion;
+import com.squareup.picasso.Picasso;
 
 import org.androidannotations.annotations.EViewGroup;
 import org.androidannotations.annotations.ViewById;
@@ -32,6 +33,6 @@ public class FoodVendorItemView extends LinearLayout {
         title.setText(venue.getName());
         district.setText(venue.getDistrict());
 
-        Ion.with(artwork).load("http://www.placeholdr.pics/250/250");
+        Picasso.with(getContext()).load(venue.getImage()).fit().centerCrop().into(artwork);
     }
 }

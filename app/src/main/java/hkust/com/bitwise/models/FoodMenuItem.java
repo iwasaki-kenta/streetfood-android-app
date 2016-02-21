@@ -18,7 +18,7 @@ public class FoodMenuItem implements Parcelable {
     }
 
     public void minusQuantity() {
-        quantity--;
+        if (quantity >= 1) quantity--;
     }
 
     public int getQuantity() {

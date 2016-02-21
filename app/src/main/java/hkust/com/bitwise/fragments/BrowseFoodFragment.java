@@ -1,5 +1,6 @@
 package hkust.com.bitwise.fragments;
 
+import android.app.ProgressDialog;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -45,6 +46,11 @@ public class BrowseFoodFragment extends Fragment {
         list.setLayoutManager(layoutManager = new GridLayoutManager(getContext(), 2));
         list.setAdapter(adapter = new FoodCategoryAdapter());
 
+        final ProgressDialog dialog = new ProgressDialog(getContext());
+        dialog.setTitle("Loading");
+        dialog.setMessage("Looking for closest sources of street food...");
+        dialog.show();
+
         Ion.with(getContext()).load(APIUtils.selections()).asJsonArray().setCallback(new FutureCallback<JsonArray>() {
             @Override
             public void onCompleted(Exception e, JsonArray result) {
@@ -52,15 +58,20 @@ public class BrowseFoodFragment extends Fragment {
                     e.printStackTrace();
                     return;
                 }
-                foodCategoryList.clear();
-                for (int i = 0; i < result.size(); i++) {
-                    JsonObject obj = result.get(i).getAsJsonObject();
-                    FoodCategory category = new FoodCategory();
-                    category.setName(obj.get("name").getAsString());
-                    category.setImage(obj.get("image").getAsString());
-                    foodCategoryList.add(category);
-                }
+
+                try {
+                    foodCategoryList.clear();
+                    for (int i = 0; i < result.size(); i++) {
+                        JsonObject obj = result.get(i).getAsJsonObject();
+                        FoodCategory category = new FoodCategory();
+                        category.setName(obj.get("name").getAsString());
+                        category.setImage(obj.get("image").getAsString());
+                        foodCategoryList.add(category);
+                    }
+                } catch (Exception ex) {}
+
                 adapter.notifyDataSetChanged();
+                dialog.dismiss();
             }
         });
     }

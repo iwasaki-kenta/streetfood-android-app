@@ -7,6 +7,7 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.koushikdutta.ion.Ion;
+import com.squareup.picasso.Picasso;
 
 import org.androidannotations.annotations.EViewGroup;
 import org.androidannotations.annotations.ViewById;
@@ -28,6 +29,6 @@ public class FoodCategoryItemView extends LinearLayout {
 
     public void bind(FoodCategory cat) {
         title.setText(cat.getName());
-        Ion.with(artwork).centerCrop().load(cat.getImage());
+        Picasso.with(getContext()).load(cat.getImage()).fit().centerCrop().into(artwork);
     }
 }

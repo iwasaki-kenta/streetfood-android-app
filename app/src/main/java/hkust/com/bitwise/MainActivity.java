@@ -10,7 +10,6 @@ import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
-import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.RelativeLayout;
@@ -20,6 +19,7 @@ import org.androidannotations.annotations.EActivity;
 import org.androidannotations.annotations.ViewById;
 
 import hkust.com.bitwise.fragments.BrowseFoodFragment_;
+import hkust.com.bitwise.fragments.LikesFragment_;
 import hkust.com.bitwise.utils.FragmentUtil;
 
 @EActivity(R.layout.activity_main)
@@ -39,6 +39,7 @@ public class MainActivity extends AppCompatActivity
     RelativeLayout currentFragment;
 
     Fragment browseFoodFragment;
+    Fragment likesFragment;
 
     Fragment nextFragment;
 
@@ -66,6 +67,8 @@ public class MainActivity extends AppCompatActivity
         navigationView.setNavigationItemSelectedListener(this);
 
         browseFoodFragment = BrowseFoodFragment_.builder().build();
+        likesFragment = LikesFragment_.builder().build();
+
         FragmentUtil.gotoFragment(getSupportFragmentManager(), browseFoodFragment, false, null);
 
         getSupportFragmentManager().addOnBackStackChangedListener(this);
@@ -79,23 +82,6 @@ public class MainActivity extends AppCompatActivity
         } else {
             super.onBackPressed();
         }
-    }
-
-    @Override
-    public boolean onCreateOptionsMenu(Menu menu) {
-        getMenuInflater().inflate(R.menu.main, menu);
-        return true;
-    }
-
-    @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
-        int id = item.getItemId();
-
-        if (id == R.id.action_settings) {
-            return true;
-        }
-
-        return super.onOptionsItemSelected(item);
     }
 
     @Override
@@ -119,7 +105,7 @@ public class MainActivity extends AppCompatActivity
             } else if (id == R.id.popular_vendors) {
 
             } else if (id == R.id.liked_vendors) {
-
+                nextFragment = likesFragment;
             } else if (id == R.id.nav_share) {
 
             } else if (id == R.id.nav_send) {

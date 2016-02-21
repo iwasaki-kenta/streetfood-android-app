@@ -1,6 +1,8 @@
 package hkust.com.bitwise;
 
+import android.content.DialogInterface;
 import android.support.design.widget.CollapsingToolbarLayout;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.LinearLayoutManager;
@@ -10,9 +12,13 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 import android.widget.ToggleButton;
 
+import com.activeandroid.query.Select;
+import com.google.gson.Gson;
 import com.google.gson.JsonArray;
 import com.google.gson.JsonObject;
 import com.koushikdutta.async.future.FutureCallback;
@@ -31,6 +37,8 @@ import hkust.com.bitwise.fragments.BrowseVendorFragment_;
 import hkust.com.bitwise.models.FoodCategory;
 import hkust.com.bitwise.models.FoodMenuItem;
 import hkust.com.bitwise.models.FoodVendor;
+import hkust.com.bitwise.models.Likes;
+import hkust.com.bitwise.ui.NoScrollRecycler;
 import hkust.com.bitwise.ui.RecyclerViewAdapterBase;
 import hkust.com.bitwise.ui.ViewWrapper;
 import hkust.com.bitwise.ui.items.FoodCategoryItemView;
@@ -57,13 +65,16 @@ public class VendorActivity extends AppCompatActivity {
     List<FoodMenuItem> menuItemList = new ArrayList<FoodMenuItem>();
 
     @ViewById
-    RecyclerView menuItems;
+    NoScrollRecycler menuItems;
 
     @ViewById
     ToggleButton likeButton;
 
     @ViewById
     Button takeOutButton;
+
+    @ViewById
+    ImageView toolbarImage;
 
     RecyclerView.LayoutManager layoutManager;
     MenuItemAdapter adapter;
@@ -101,16 +112,58 @@ public class VendorActivity extends AppCompatActivity {
         toolbarLayout.setTitle(vendor.getName());
         district.setText(vendor.getDistrict());
 
+        likeButton.setChecked(new Select().from(Likes.class).where("vendorId = ?", vendor.getId()).exists());
+
+        Ion.with(toolbarImage).centerCrop().load(vendor.getImage());
+
+    }
+
+    public int totalCost() {
+        int sum = 0;
+        for (FoodMenuItem item : menuItemList) {
+            sum += item.getQuantity() * item.getPrice();
+        }
+        return sum;
     }
 
     @Click(R.id.likeButton)
     void likeVendor() {
-
+        if (likeButton.isChecked()) {
+            Likes like = new Likes(vendor.getId(), new Gson().toJson(vendor));
+            like.save();
+        } else {
+            Likes like = new Select().from(Likes.class).where("vendorId = ?", vendor.getId()).executeSingle();
+            like.delete();
+        }
     }
 
     @Click(R.id.takeOutButton)
     void takeoutVendor() {
-        finish();
+        int totalCost = totalCost();
+
+        if (totalCost > 0) {
+            DialogInterface.OnClickListener dialogClickListener = new DialogInterface.OnClickListener() {
+                @Override
+                public void onClick(DialogInterface dialog, int which) {
+                    switch (which) {
+                        case DialogInterface.BUTTON_POSITIVE:
+                            Toast.makeText(VendorActivity.this, "Your order has successfully been placed!", Toast.LENGTH_LONG).show();
+                            finish();
+                            break;
+
+                        case DialogInterface.BUTTON_NEGATIVE:
+                            break;
+                    }
+                }
+            };
+
+            AlertDialog.Builder builder = new AlertDialog.Builder(this);
+            builder.setMessage("Your order costs a total of HKD$" + String.valueOf(totalCost) + ".\n\n" +
+                    "Would you like to use:\nCard [XXXX-4509 VISA]\n\n...to pay for your order?").setPositiveButton("Yes", dialogClickListener)
+                    .setNegativeButton("No", dialogClickListener).show();
+        } else {
+            Toast.makeText(VendorActivity.this, "Please select items to take away.", Toast.LENGTH_SHORT).show();
+        }
     }
 
     class MenuItemAdapter extends RecyclerViewAdapterBase<FoodMenuItem, MenuItemView> {

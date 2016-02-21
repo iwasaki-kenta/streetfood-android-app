@@ -1,5 +1,8 @@
 package hkust.com.bitwise.fragments;
 
+import android.app.ProgressDialog;
+import android.os.Bundle;
+import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.support.v4.view.ViewCompat;
 import android.support.v4.widget.SwipeRefreshLayout;
@@ -26,6 +29,7 @@ import hkust.com.bitwise.VendorActivity_;
 import hkust.com.bitwise.models.FoodCategory;
 import hkust.com.bitwise.models.FoodVendor;
 import hkust.com.bitwise.ui.RecyclerViewAdapterBase;
+import hkust.com.bitwise.ui.StableLayoutManager;
 import hkust.com.bitwise.ui.ViewWrapper;
 import hkust.com.bitwise.ui.items.FoodVendorItemView;
 import hkust.com.bitwise.ui.items.FoodVendorItemView_;
@@ -56,7 +60,7 @@ public class BrowseVendorFragment extends Fragment {
 
     @AfterViews
     void setupList() {
-        list.setLayoutManager(layoutManager = new LinearLayoutManager(getContext()));
+        list.setLayoutManager(layoutManager = new StableLayoutManager(getContext(), LinearLayoutManager.VERTICAL, false));
         list.setAdapter(adapter = new VendorAdapter());
 
         if (foodVendorList.size() == 0 && !refreshLayout.isRefreshing()) {
@@ -87,6 +91,10 @@ public class BrowseVendorFragment extends Fragment {
 
     private void loadVenues() {
         refreshLayout.setRefreshing(true);
+        final ProgressDialog dialog = new ProgressDialog(getContext());
+        dialog.setTitle("Loading");
+        dialog.setMessage("Looking for street food...");
+        dialog.show();
 
         Ion.with(getContext()).load(APIUtils.selections(selectedCategory, currentPageNum, null)).asJsonArray().setCallback(new FutureCallback<JsonArray>() {
             @Override
@@ -102,6 +110,7 @@ public class BrowseVendorFragment extends Fragment {
                     venue.setId(obj.get("_id").getAsString());
                     venue.setName(obj.get("name").getAsString());
                     venue.setDistrict(obj.get("district").getAsString());
+                    venue.setImage(obj.get("image").getAsString());
                     for (JsonElement item : obj.get("items").getAsJsonArray()) {
                         venue.addMenuItemId(item.getAsString());
                     }
@@ -111,6 +120,8 @@ public class BrowseVendorFragment extends Fragment {
                 adapter.notifyDataSetChanged();
 
                 refreshLayout.setRefreshing(false);
+
+                dialog.dismiss();
             }
         });
 

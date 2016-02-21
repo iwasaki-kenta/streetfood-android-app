@@ -11,7 +11,16 @@ public class FoodVendor implements Parcelable {
     private String name;
     private String district;
     private String location;
+    private String image;
     private List<String> menuIds = new ArrayList<String>();
+
+    public String getImage() {
+        return image;
+    }
+
+    public void setImage(String image) {
+        this.image = image;
+    }
 
     public String getDistrict() {
         return district;
@@ -62,6 +71,7 @@ public class FoodVendor implements Parcelable {
         district = in.readString();
         menuIds = null;
         location = in.readString();
+        image = in.readString();
         if (in.readByte() == 0x01) {
             menuIds = new ArrayList<String>();
             in.readList(menuIds, String.class.getClassLoader());
@@ -80,6 +90,7 @@ public class FoodVendor implements Parcelable {
         dest.writeString(name);
         dest.writeString(district);
         dest.writeString(location);
+        dest.writeString(image);
         if (menuIds == null) {
             dest.writeByte((byte) (0x00));
         } else {
